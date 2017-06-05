@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  {% for p in posts %}
+    {{ p.render() | safe }}
+    <br><br> 
+
+    <hr>
+    
+    <div class = demo>
+
+         <!-- Container for edit and delete posts -->
+         <div class="edit_del">
+      
+              <form action="/blog/deletepost/{{p.key().id()}}"> 
+        	    <input type="submit" value="&#10005;" title="delete post">
+              </form> |
+  
+              <form action="/blog/editpost/{{p.key().id()}}"> 
+        	    <input type="submit" value="&#x270D;" title="edit post">
+              </form>
+  
+         </div>
+   
+         <!-- Container for comment package -->
+         <div class = "comm">
+              <form action = "/blog/postcomment/{{p.key().id()}}">
+                    <input type = "submit" value = "comment" title = "post comment">
+              </form>
+         </div>
+
+         <!-- Container for like and dislike posts -->
+         <div class="edit_del">
+      
+              <form action="/blog/likepost/{{p.key().id()}}"> 
+        	    <input type="submit" value="&#8466;" title="like post">
+              </form> |
+  
+              <form action="/blog/dislikepost/{{p.key().id()}}"> 
+        	    <input type="submit" value="&#8517;" title="dislike post">
+              </form>
+  
+         </div>
+    </div>
+  {% endfor %}
+
+{% endblock %}

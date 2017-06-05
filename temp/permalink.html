@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{post.render() | safe}}
+
+  <hr>
+
+  <div>
+        like_score<span>({{post.l}})</span> |
+  	dislike_score<span>({{post.d}})</span>
+  </div>
+
+  <!-- Comment package -->  
+  <div>
+
+     <h3>What do you feel about this post, enter here :</h3>
+  	<form method="post" action="/blog/commentMainPage/{{post.key().id()}}">
+  	    <div class="error">{{error}}</div>
+  	    <textarea placeholder="Enter your views here!" name="comment">{{content}}</textarea>
+  	    <br>
+  	    <input type="submit">
+  	</form>
+  	<br>
+        
+        <!-- Comment by users -->
+        <div>
+  	    {% for comm in comments %}
+  	        <div>
+  	            <div>
+  	                <div>
+  		 	    {{comm.owner}} | ({{comm.created.strftime("%b %d, %Y")}})
+  		 	</div>
+  		    </div>
+  		    <div>
+        	        {{comm.comment | safe}}
+  		    </div>
+  		    <div>
+  		        <a href="/blog/editcomment/{{comm.key().id()}}" title="edit comment">&#x270D;</a> |
+  		        <a href="/blog/deletecomment/{{comm.key().id()}}" title="delete comment">&#10005;</a>
+  		    </div>
+  		</div>
+  	    {% endfor %}
+  	</div> 
+
+  </div>
+{% endblock %}
