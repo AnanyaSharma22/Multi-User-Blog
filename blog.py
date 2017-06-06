@@ -248,11 +248,11 @@ class DeletePost(BlogHandler):
                     Comm = Comment.all().filter('post_id =', pId)
                     self.render(
                         "permalink.html", post=p,
-                        error="You cannot delete this post, as user can only delete his/her own post.",
+                        error="You cannot delete this post, as user"
+			       "can only delete his/her own post.",
                         comments=Comm)			
-        else:
-	    self.redirect("/login")
-
+        
+	
 # Handler for the post edits.
 class EditPost(BlogHandler):
 
@@ -268,11 +268,10 @@ class EditPost(BlogHandler):
                     Comm = Comment.all().filter('post_id =', pId)
                     self.render(
                         "permalink.html", post=p,
-                        error="You cannot edit this post, as user can only delete his/her own post.",
+                        error="You cannot edit this post, as user"
+			      "can only delete his/her own post.",
    			comments=Comm)
-	 else:
-	    self.redirect("/login")
-
+	 
     def post(self, pId):
         if not self.user:
             return self.redirect('/blog')
@@ -287,7 +286,8 @@ class EditPost(BlogHandler):
         if not self.user_self_post(self.user, p):
             Comm = Comment.all().filter('post_id =', pId)
             self.render("permalink.html", post=p,
-                        error="You cannot edit this post, as user can only delete his/her own post.",
+                        error="You cannot edit this post, as user"
+			      "can only delete his/her own post.",
                         comments=Comm)
         elif subject and content:
             p.subject = subject
@@ -360,7 +360,8 @@ class DeleteComment(BlogHandler):
             self.render(
                     "permalink.html",
                      post=p,
-                     error="You cannot delete this comment, as user can only delete his/her own comment!",
+                     error="You cannot delete this comment, as user"
+		           "can only delete his/her own comment!",
                      comments=Comm)
 
 
@@ -388,7 +389,8 @@ class EditComment(BlogHandler):
         else:
             self.render("permalink.html",
                          post=p,
-                         error="You cannot edit this comment, as user can only edit his/her own comment!",
+                         error="You cannot edit this comment, as user"
+			       "can only edit his/her own comment!",
                          comments=Comm)
 
     def post(self, cId):
@@ -413,6 +415,19 @@ class EditComment(BlogHandler):
         key = db.Key.from_path('Comment', int(cId))
         c = db.get(key)
         c.comment = newComm
+	
+	if int(c.user_id) == self.user.key().id():
+            self.render("editcomment.html",
+                         post=p,
+                         content=c.comment,
+                         comment=c)
+        else:
+            self.render("permalink.html",
+                         post=p,
+                         error="You cannot edit this comment, as user can"
+			       "only edit his/her own comment!",
+                         comments=Comm)
+	
         c.put()
 
         Comm = Comment.all().filter('post_id =', c.post_id).order('-created')
@@ -440,7 +455,8 @@ class LikePost(BlogHandler):
                 if self.user_self_post(self.user, p):
                     self.render(
                         "permalink.html", post=p,
-                        error="You cannot like this post, as user cannot like his/her own post!",
+                        error="You cannot like this post, as user"
+			      "cannot like his/her own post!",
                         comments=Comm)
                     return
 
@@ -485,7 +501,8 @@ class DislikePost(BlogHandler):
                     return self.render(
                         "permalink.html",
                         post=p,
-                        error="You cannot dislike this post, as user cannot dislike his/her own post!",
+                        error="You cannot dislike this post, as user"
+			      "cannot dislike his/her own post!",
                         comments=Comm)
 
                 d = DislikeModel.all()
