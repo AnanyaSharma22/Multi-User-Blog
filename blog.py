@@ -29,7 +29,6 @@ def check_secure_val(secure_val):
         return val
  
 # Base class for all the handlers!
-
 class BlogHandler(webapp2.RequestHandler):
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
@@ -150,9 +149,7 @@ class User(db.Model):
         if u and valid_pw(name, pw, u.pw_hash):
             return u
 
-
 ##### blog stuff
-
 def blog_key(name = 'default'):
     return db.Key.from_path('blogs', name)
 
@@ -231,7 +228,6 @@ class NewPost(BlogHandler):
                 "newpost.html", subject=subject, content=content,
                 error=error)
 
-
 # Handler for the post deletion.
 class DeletePost(BlogHandler):
 
@@ -251,8 +247,7 @@ class DeletePost(BlogHandler):
                         error="You cannot delete this post, as user"
 			       "can only delete his/her own post.",
                         comments=Comm)			
-        
-	
+        	
 # Handler for the post edits.
 class EditPost(BlogHandler):
 
@@ -364,7 +359,6 @@ class DeleteComment(BlogHandler):
 		           "can only delete his/her own comment!",
                      comments=Comm)
 
-
 # Handler for the comment edits.
 class EditComment(BlogHandler):
 
@@ -433,7 +427,6 @@ class EditComment(BlogHandler):
         Comm = Comment.all().filter('post_id =', c.post_id).order('-created')
         self.render("permalink.html", post=p, comments=Comm)
 
-
 # The Like Model.
 class LikeModel(db.Model):
     user_id = db.StringProperty()
@@ -442,7 +435,6 @@ class LikeModel(db.Model):
     def User_Name(self):
         user = User.by_id(self.user_id)
 	return user.name
-
 
 # Handler for the functionality of liking a post.
 class LikePost(BlogHandler):
@@ -478,7 +470,6 @@ class LikePost(BlogHandler):
                 p.put()
 	        self.render("permalink.html", post=p, comments=Comm)
 
-
 # The Dislike Model.
 class DislikeModel(db.Model):
     user_id = db.StringProperty()
@@ -487,7 +478,6 @@ class DislikeModel(db.Model):
     def User_Name(self):
         user = User.by_id(self.user_id)
 	return user.name
-
 
 # Handler for the functionality if disliking a post.
 class DislikePost(BlogHandler):
@@ -523,7 +513,6 @@ class DislikePost(BlogHandler):
                 p.put()
 		self.render("permalink.html", post=p, comments=Comm)
 
-
 ###### Unit 2 HW's
 class Rot13(BlogHandler):
     def get(self):
@@ -549,7 +538,6 @@ def valid_password(password):
 EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 def valid_email(email):
     return not email or EMAIL_RE.match(email)
-
 
 # Handler for user account creation.
 class Signup(BlogHandler):
@@ -593,7 +581,6 @@ class Unit2Signup(Signup):
     def done(self):
         self.redirect('/unit2/welcome?username=' + self.username)
 
-
 # Handler for user account registration.
 class Register(Signup):
     def done(self):
@@ -608,7 +595,6 @@ class Register(Signup):
 
             self.login(u)
             self.redirect('/blog')
-
 
 # Handler for user account login.
 class Login(BlogHandler):
@@ -626,7 +612,6 @@ class Login(BlogHandler):
         else:
             msg = 'Invalid login'
             self.render('login-form.html', error = msg)
-
 
 # Handler for user account logout.
 class Logout(BlogHandler):
