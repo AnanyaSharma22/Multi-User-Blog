@@ -393,36 +393,23 @@ class EditComment(BlogHandler):
         c = self.comment_is_present(cId)
         if not c:
             return
-
-	p = self.post_is_present(c.post_id)
+        p = self.post_is_present(c.post_id)
         if not p:
             return
 
         newComm = self.request.get("comment")
         if not newComm:
             error = "This is invalid, enter valid content !"
-            self.render("editcomment.html", post=p, content=newComm, error=error, comment=c)
+            self.render("editcomment.html", post=p, 
+		content=newComm, error=error, comment=c)
             return
 
         # update the row and the Comment entity
         key = db.Key.from_path('Comment', int(cId))
         c = db.get(key)
         c.comment = newComm
-	
-	if int(c.user_id) == self.user.key().id():
-            self.render("editcomment.html",
-                         post=p,
-                         content=c.comment,
-                         comment=c)
-        else:
-            self.render("permalink.html",
-                         post=p,
-                         error="You cannot edit this comment, as user can"
-			       "only edit his/her own comment!",
-                         comments=Comm)
-	
-        c.put()
-
+	if int(c.user_id)==self.user.key().id():
+            c.put()
         Comm = Comment.all().filter('post_id =', c.post_id).order('-created')
         self.render("permalink.html", post=p, comments=Comm)
 
