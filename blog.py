@@ -102,7 +102,6 @@ class MainPage(BlogHandler):
   def get(self):
       self.write('Hello, Udacity!')
 
-
 ##### user stuff
 def make_salt(length = 5):
     return ''.join(random.choice(letters) for x in xrange(length))
