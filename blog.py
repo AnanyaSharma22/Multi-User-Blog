@@ -209,6 +209,8 @@ class NewPost(BlogHandler):
     def get(self):
         if self.user_signed_in(self.user):
             self.render("newpost.html")
+        else:
+	    self.redirect("/login")
 
     def post(self):
         if not self.user:
@@ -247,8 +249,9 @@ class DeletePost(BlogHandler):
                     self.render(
                         "permalink.html", post=p,
                         error="You cannot delete this post, as user can only delete his/her own post.",
-                        comments=Comm)
-
+                        comments=Comm)			
+        else:
+	    self.redirect("/login")
 
 # Handler for the post edits.
 class EditPost(BlogHandler):
@@ -267,6 +270,8 @@ class EditPost(BlogHandler):
                         "permalink.html", post=p,
                         error="You cannot edit this post, as user can only delete his/her own post.",
    			comments=Comm)
+	 else:
+	    self.redirect("/login")
 
     def post(self, pId):
         if not self.user:
